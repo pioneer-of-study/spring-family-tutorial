@@ -1,7 +1,7 @@
 # spring-family-tutorial
-简介：一份由浅入深的spring全家桶教程,包含Spring Core、Spring Context、Spring AOP、Spring DAO、Spring ORM、Spring Web MVC、Spring Security 共7个模块的简单入门介绍及原理介绍，并在各模块末尾附上对应的demo代码。
+简介：一份由浅入深的spring全家桶教程,包含Spring Core、Spring Context、Spring AOP、Spring DAO、Spring ORM、Spring Web MVC、Spring Security 共7个模块的简单入门介绍及原理介绍，并对模块都创建了demo项目，原理介绍部分的demo项目为模块名+principle。
 
-人员：胡强、李世宗、韩峰、崔宇航、宋兴文、许妍、朱玉麟
+人员：胡强、李世宗、韩峰、崔宇航、宋兴文、许妍、朱玉麟.
 
 -----------------
 
