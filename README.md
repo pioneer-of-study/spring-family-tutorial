@@ -10,7 +10,7 @@
 ### Spring Core
 
 ### Spring Context
-# Spring-context-配置方式
+# Spring-context-xml配置方式
 
 ## 1.Spring简介
 
