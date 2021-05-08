@@ -4,6 +4,8 @@
 
 ### Spring Web Mvc
 
+> > 该部分参考：https://www.jianshu.com/p/91a2d0a1e45a
+
 ### 一、采用配置方式的Spring MVC
 
 > *示例代码为demo1*
@@ -166,6 +168,68 @@ java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
 报错信息为`org.springframework.web.context.ContextLoaderListener`错误时，是因为spring监听器缺失，是jar包没有同步发布到项目中进行运行，导致项目运行找不到spring的jar包，解决方法为： 
 
 项目右键–properties----Deployment----加入maven dependencies这些jar包
+
+
+
+### 二、采用注解方式的Spring MVC
+
+> *示例代码为demo2*
+
+#### 1、修改 HelloController 的代码
+
+在demo1的基础上，将HelloController的代码修改为如下：
+
+```
+package controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class HelloController{
+    @RequestMapping("/hello")
+    public ModelAndView handleRequest(javax.servlet.http.HttpServletRequest httpServletRequest, javax.servlet.http.HttpServletResponse httpServletResponse) throws Exception {
+        ModelAndView mav = new ModelAndView("index.jsp");
+        mav.addObject("message", "Hello Spring MVC");
+        return mav;
+    }
+}
+```
+
+
+
+#### 2、修改 dispatcher-servlet.xml 相关配置
+
+在 dispatcher-servlet.xml 文件中，注释掉之前的配置，然后增加一句组件扫描：
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+<!--    <bean id="simpleUrlHandlerMapping"-->
+<!--          class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">-->
+<!--        <property name="mappings">-->
+<!--            <props>-->
+<!--                &lt;!&ndash; /hello 路径的请求交给 id 为 helloController 的控制器处理&ndash;&gt;-->
+<!--                <prop key="/hello">helloController</prop>-->
+<!--            </props>-->
+<!--        </property>-->
+<!--    </bean>-->
+<!--    <bean id="helloController" class="controller.HelloController"></bean>-->
+
+    <!-- 扫描controller下的组件 -->
+    <context:component-scan base-package="controller"/>
+</beans>
+```
+
+
+
+#### 3、重启项目
+
+重启后，看到仍然和之前一样。
 
 
 
