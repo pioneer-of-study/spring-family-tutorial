@@ -2,4 +2,4 @@ spring:
   security:
     user:
       name: huq
-      password: 123
+      password: 1234
