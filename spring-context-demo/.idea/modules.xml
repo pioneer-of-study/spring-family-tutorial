@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/simple_ioc_test/simple_ioc_test.iml" filepath="$PROJECT_DIR$/simple_ioc_test/simple_ioc_test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simple_ioc_using/simple_ioc_using.iml" filepath="$PROJECT_DIR$/simple_ioc_using/simple_ioc_using.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-context-demo.iml" filepath="$PROJECT_DIR$/spring-context-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring_ioc_test/spring_ioc_test.iml" filepath="$PROJECT_DIR$/spring_ioc_test/spring_ioc_test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring_ioc_using/spring_ioc_using.iml" filepath="$PROJECT_DIR$/spring_ioc_using/spring_ioc_using.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring_t_di/spring_t_di.iml" filepath="$PROJECT_DIR$/spring_t_di/spring_t_di.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring_t_di_test/spring_t_di_test.iml" filepath="$PROJECT_DIR$/spring_t_di_test/spring_t_di_test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring_z_annotation/spring_z_annotation.iml" filepath="$PROJECT_DIR$/spring_z_annotation/spring_z_annotation.iml" />
+    </modules>
+  </component>
+</project>
