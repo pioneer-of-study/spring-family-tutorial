@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="simple_ioc_using" />
+        <module name="spring_z_annotation" />
+        <module name="spring_ioc_using" />
+        <module name="spring_t_di_test" />
+        <module name="spring_ioc_test" />
+        <module name="spring_t_di" />
+        <module name="simple_ioc_test" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="simple_ioc_test" target="8" />
+      <module name="simple_ioc_using" target="8" />
+      <module name="spring_ioc_test" target="1.5" />
+      <module name="spring_ioc_using" target="1.5" />
+      <module name="spring_t_di" target="1.5" />
+      <module name="spring_t_di_test" target="1.5" />
+      <module name="spring_z_annotation" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
