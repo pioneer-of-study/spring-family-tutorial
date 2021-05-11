@@ -15,6 +15,45 @@
 
 ### Spring DAO
 
+- Spring的Dao模块是Spring框架中对应持久层的解决方式，提供了对JDBC、Hibernate等DAO层支持。
+- Spring框架对JDBC进行了封装，完全抛弃了JDBC API。数据库连接、事务等也交给了Spring打点，开发者只需要使用封装好的JdbcTemplate执行SQL语句，然后得到需要的结果。
+
+1. #### 导入包
+
+   spring boot ：导入mysql和springJDBC的关系依赖包，在pom.xml中增加如下代码
+
+   ```
+   <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-jdbc</artifactId>
+   </dependency>
+    
+   <dependency>
+       <groupId>mysql</groupId>
+       <artifactId>mysql-connector-java</artifactId>
+   </dependency>
+   ```
+
+   spring：导入jar包
+
+   - spring-jdbc-3.2.5.RELEASE.jar
+   - spring-tx-3.2.5.RELEASE.jar
+
+2. #### 数据库连接配置
+
+   在application.yml中配置数据库连接及相关配置
+
+   ```
+   spring:
+       datasource:
+           url: jdbc:mysql://localhost:3306/boot_crm?serverTimezone=UTC
+           username: root
+           password: 123456
+           driver-class-name: com.mysql.cj.jdbc.Driver
+   ```
+
+3. 
+
 ### Spring ORM
 
 #### 1.ORM是什么，为什么要使用ORM
