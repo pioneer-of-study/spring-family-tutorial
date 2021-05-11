@@ -38,7 +38,7 @@ public class ORMSession {
                     //5.遍历过程中根据属性得到它的值
                     String columnValue = field.get(entity).toString();
                     //6.拼接SQL语句
-                    insertSQL1 += columnName+"'";
+                    insertSQL1 += columnName+",";
                     insertSQL2 += "'" + columnValue + "',";
                 }
                 insertSQL = insertSQL1.substring(0,insertSQL1.length()-1)
