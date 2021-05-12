@@ -10,21 +10,23 @@
 ### Spring Core
 
 ### Spring Context
+
 # Spring-context-xml配置方式
 
 ## 1.Spring简介
 
-​	 Spring是一个开源框架，它由[Rod Johnson](https://baike.baidu.com/item/Rod Johnson)创建。它是为了解决企业应用开发的复杂性而创建的。 
-
-​	 目前是JavaEE开发的灵魂框架。他可以简化JavaEE开发，可以非常方便整合其他框架，无侵入的进行功能增强。
-
-​	 Spring的核心就是 控制反转(IoC)和面向切面(AOP) 。
+	 Spring是一个开源框架，它由[Rod Johnson](https://baike.baidu.com/item/Rod Johnson)创建。它是为了解决企业应用开发的复杂性而创建的。 
+	
+	 目前是JavaEE开发的灵魂框架。他可以简化JavaEE开发，可以非常方便整合其他框架，无侵入的进行功能增强。
+	
+	 Spring的核心就是 控制反转(IoC)和面向切面(AOP) 。
 
 ## 2.IOC控制反转
 
 ### 2.1 概念
 
-​	控制反转，之前对象的控制权在类手上，现在反转后到了Spring手上。
+	控制反转，之前对象的控制权在类手上，现在反转后到了Spring手上。
+
 
 ​	
 
@@ -88,25 +90,26 @@
 
 #### 2.3.1 id
 
-​	bean的唯一标识，同一个Spring容器中不允许重复
+	bean的唯一标识，同一个Spring容器中不允许重复
 
 #### 2.3.2 class
 
-​	全类名，用于反射创建对象
+	全类名，用于反射创建对象
 
 #### 2.3.3 scope 
 
-​	scope主要有两个值：singleton和prototype
-
-​	如果设置为singleton则一个容器中只会有这个一个bean对象。默认容器创建的时候就会创建该对象。
-
-​	如果设置为prototype则一个容器中会有多个该bean对象。每次调用getBean方法获取时都会创建一个新对象。
+	scope主要有两个值：singleton和prototype
+	
+	如果设置为singleton则一个容器中只会有这个一个bean对象。默认容器创建的时候就会创建该对象。
+	
+	如果设置为prototype则一个容器中会有多个该bean对象。每次调用getBean方法获取时都会创建一个新对象。
 
 
 
 ## 3.DI依赖注入
 
-​	依赖注入可以理解成IoC的一种应用场景，反转的是对象间依赖关系维护权。
+	依赖注入可以理解成IoC的一种应用场景，反转的是对象间依赖关系维护权。
+
 
 ​	
 
@@ -115,87 +118,11 @@
 在要注入属性的bean标签中进行配置。前提是该类有提供属性对应的set方法。
 
 ~~~~java
-package com.zhuyl10.spdb;
-
-public class Student {
-
-    private String name;
-    private int id;
-    private int age;
-
-    private Dog dog;
-
-    public Dog getDog() {
-        return dog;
-    }
-
-    public void setDog(Dog dog) {
-        this.dog = dog;
-    }
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "name='" + name + '\'' +
-                ", id=" + id +
-                ", age=" + age +
-                '}';
-    }
-
-    public Student() {
-
-    }
-
-    public Student(String name, int id, int age) {
-        this.name = name;
-        this.id = id;
-        this.age = age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-}
-
+package com.zhuyl10.spdb;public class Student {    private String name;    private int id;    private int age;    private Dog dog;    public Dog getDog() {        return dog;    }    public void setDog(Dog dog) {        this.dog = dog;    }    @Override    public String toString() {        return "Student{" +                "name='" + name + '\'' +                ", id=" + id +                ", age=" + age +                '}';    }    public Student() {    }    public Student(String name, int id, int age) {        this.name = name;        this.id = id;        this.age = age;    }    public String getName() {        return name;    }    public void setName(String name) {        this.name = name;    }    public int getId() {        return id;    }    public void setId(int id) {        this.id = id;    }    public int getAge() {        return age;    }    public void setAge(int age) {        this.age = age;    }}
 ~~~~
 
 ~~~~xml
-    <bean class="com.zhuyl10.spdb.Dog" id="dog">
-        <property name="name" value="小白"></property>
-        <property name="age" value="6"></property>
-    </bean>
-
-    <bean class="com.zhuyl10.spdb.Student" id="student" >
-        <!--
-            name属性用来指定要设置哪个属性
-            value属性用来设置要设置的值
-            ref属性用来给引用类型的属性设置值，可以写上Spring容器中bean的id
-        -->
-        <property name="name" value="东南枝"></property>
-        <property name="age" value="20"></property>
-        <property name="id" value="1"></property>
-        <property name="dog" ref="dog"></property>
-    </bean>
+    <bean class="com.zhuyl10.spdb.Dog" id="dog">        <property name="name" value="小白"></property>        <property name="age" value="6"></property>    </bean>    <bean class="com.zhuyl10.spdb.Student" id="student" >        <!--            name属性用来指定要设置哪个属性            value属性用来设置要设置的值            ref属性用来给引用类型的属性设置值，可以写上Spring容器中bean的id        -->        <property name="name" value="东南枝"></property>        <property name="age" value="20"></property>        <property name="id" value="1"></property>        <property name="dog" ref="dog"></property>    </bean>
 ~~~~
 
 
@@ -205,32 +132,11 @@ public class Student {
 在要注入属性的bean标签中进行配置。前提是该类有提供对应的有参构造。
 
 ~~~~java
-public class Student {
-
-    private String name;
-    private int id;
-    private int age;
-
-    private Dog dog;
-
-    public Student(String name, int id, int age, Dog dog) {
-        this.name = name;
-        this.id = id;
-        this.age = age;
-        this.dog = dog;
-    }
-    //.....省略其他
-}
+public class Student {    private String name;    private int id;    private int age;    private Dog dog;    public Student(String name, int id, int age, Dog dog) {        this.name = name;        this.id = id;        this.age = age;        this.dog = dog;    }    //.....省略其他}
 ~~~~
 
 ~~~~xml
-    <!--使用有参构造进行注入-->
-    <bean class="com.zhuyl10.spdb.Student" id="student2" >
-        <constructor-arg name="name" value="自挂东南枝"></constructor-arg>
-        <constructor-arg name="age" value="20"></constructor-arg>
-        <constructor-arg name="id" value="30"></constructor-arg>
-        <constructor-arg name="dog" ref="dog"></constructor-arg>
-    </bean>
+    <!--使用有参构造进行注入-->    <bean class="com.zhuyl10.spdb.Student" id="student2" >        <constructor-arg name="name" value="自挂东南枝"></constructor-arg>        <constructor-arg name="age" value="20"></constructor-arg>        <constructor-arg name="id" value="30"></constructor-arg>        <constructor-arg name="dog" ref="dog"></constructor-arg>    </bean>
 ~~~~
 
 
@@ -240,33 +146,11 @@ public class Student {
 实体类如下：
 
 ~~~~java
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class User {
-    private int age;
-    private String name;
-    private Phone phone;
-    private List<String> list;
-    private List<Phone> phones;
-    private Set<String> set;
-    private Map<String, Phone> map;
-    private int[] arr;
-    private Properties properties;
-}
+@Data@NoArgsConstructor@AllArgsConstructorpublic class User {    private int age;    private String name;    private Phone phone;    private List<String> list;    private List<Phone> phones;    private Set<String> set;    private Map<String, Phone> map;    private int[] arr;    private Properties properties;}
 ~~~~
 
 ~~~~java
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Phone {
-    private double price;
-    private String name;
-    private String password;
-    private String path;
-
-}
+@Data@NoArgsConstructor@AllArgsConstructorpublic class Phone {    private double price;    private String name;    private String password;    private String path;}
 ~~~~
 
 
@@ -274,64 +158,7 @@ public class Phone {
 配置如下：
 
 ~~~~xml
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-    <bean class="com.zhuyl10.spdb.Phone" id="phone">
-        <property name="price" value="3999"></property>
-        <property name="name" value="黑米"></property>
-        <property name="password" value="123"></property>
-        <property name="path" value="qqqq"></property>
-    </bean>
-    
-    <bean class="com.zhuyl10.spdb.User" id="user">
-        <property name="age" value="10"></property>
-        <property name="name" value="大队长"></property>
-        <property name="phone" ref="phone"></property>
-        <property name="list">
-            <list>
-                <value>三更</value>
-                <value>西施</value>
-            </list>
-        </property>
-
-        <property name="phones">
-            <list>
-                <ref bean="phone"></ref>
-            </list>
-        </property>
-
-        <property name="set">
-            <set>
-                <value>setEle1</value>
-                <value>setEle2</value>
-            </set>
-        </property>
-
-        <property name="map">
-            <map>
-                <entry key="k1" value-ref="phone"></entry>
-                <entry key="k2" value-ref="phone"></entry>
-            </map>
-        </property>
-
-        <property name="arr">
-            <array>
-                <value>10</value>
-                <value>11</value>
-            </array>
-        </property>
-
-        <property name="properties">
-            <props>
-                <prop key="k1">v1</prop>
-                <prop key="k2">v2</prop>
-            </props>
-        </property>
-    </bean>
-</beans>
+<?xml version="1.0" encoding="UTF-8"?><beans xmlns="http://www.springframework.org/schema/beans"       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">    <bean class="com.zhuyl10.spdb.Phone" id="phone">        <property name="price" value="3999"></property>        <property name="name" value="黑米"></property>        <property name="password" value="123"></property>        <property name="path" value="qqqq"></property>    </bean>        <bean class="com.zhuyl10.spdb.User" id="user">        <property name="age" value="10"></property>        <property name="name" value="大队长"></property>        <property name="phone" ref="phone"></property>        <property name="list">            <list>                <value>三更</value>                <value>西施</value>            </list>        </property>        <property name="phones">            <list>                <ref bean="phone"></ref>            </list>        </property>        <property name="set">            <set>                <value>setEle1</value>                <value>setEle2</value>            </set>        </property>        <property name="map">            <map>                <entry key="k1" value-ref="phone"></entry>                <entry key="k2" value-ref="phone"></entry>            </map>        </property>        <property name="arr">            <array>                <value>10</value>                <value>11</value>            </array>        </property>        <property name="properties">            <props>                <prop key="k1">v1</prop>                <prop key="k2">v2</prop>            </props>        </property>    </bean></beans>
 ~~~~
 
 
@@ -341,40 +168,26 @@ public class Phone {
 ### ①导入依赖
 
 ~~~~xml
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.16</version>
-        </dependency>
+        <dependency>            <groupId>org.projectlombok</groupId>            <artifactId>lombok</artifactId>            <version>1.18.16</version>        </dependency>
 ~~~~
 
 ### ②增加注解
 
 ~~~~java
-@Data //根据属性生成set，get方法
-@NoArgsConstructor //生成空参构造
-@AllArgsConstructor //生成全参构造
-public class Phone {
-    private double price;
-    private String name;
-    private String password;
-    private String path;
-
-}
+@Data //根据属性生成set，get方法@NoArgsConstructor //生成空参构造@AllArgsConstructor //生成全参构造public class Phone {    private double price;    private String name;    private String password;    private String path;}
 ~~~~
 
 
 
 ## 5.SPEL
 
-​	我们可以再配置文件中使用SPEL表达式。写法如下:
+	我们可以再配置文件中使用SPEL表达式。写法如下:
 
 ~~~~xml
-        <property name="age" value="#{20}"/>
-        <property name="car" value="#{car}"/>
+        <property name="age" value="#{20}"/>        <property name="car" value="#{car}"/>
 ~~~~
 
-​	注意：SPEL需要写到value属性中，不能写到ref属性。
+	注意：SPEL需要写到value属性中，不能写到ref属性。
 
 
 
@@ -382,7 +195,7 @@ public class Phone {
 
 ### 6.1 读取properties文件
 
-​	我们可以让Spring读取properties文件中的key/value，然后使用其中的值。
+	我们可以让Spring读取properties文件中的key/value，然后使用其中的值。
 
 #### ①设置读取properties
 
@@ -410,7 +223,7 @@ public class Phone {
 
 ### 6.2 引入Spring配置文件
 
-​	我们可以在主的配置文件中通过import标签的resource属性，引入其他的xml配置文件
+	我们可以在主的配置文件中通过import标签的resource属性，引入其他的xml配置文件
 
 ~~~~xml
 <import resource="classpath:applicationContext-book.xml"/>
@@ -424,66 +237,36 @@ public class Phone {
 
 #### 7.1.1 name属性
 
-​	我们可以用name属性来给bean取名。例如：
+	我们可以用name属性来给bean取名。例如：
 
 ~~~~xml
-    <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource" name="dataSource2,dataSource3">
-        <property name="driverClassName" value="${jdbc.driver}"></property>
-        <property name="url" value="${jdbc.url}"></property>
-        <property name="username" value="${jdbc.username}"></property>
-        <property name="password" value="${jdbc.password}"></property>
-    </bean>
+    <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource" name="dataSource2,dataSource3">        <property name="driverClassName" value="${jdbc.driver}"></property>        <property name="url" value="${jdbc.url}"></property>        <property name="username" value="${jdbc.username}"></property>        <property name="password" value="${jdbc.password}"></property>    </bean>
 ~~~~
 
-​	获取的时候就可以使用这个名字来获取了
+	获取的时候就可以使用这个名字来获取了
 
 ~~~~java
-    public static void main(String[] args) {
-
-        ApplicationContext app = new ClassPathXmlApplicationContext("applicationContext.xml");
-        DruidDataSource dataSource = (DruidDataSource) app.getBean("dataSource3");
-        System.out.println(dataSource);
-
-    }
+    public static void main(String[] args) {        ApplicationContext app = new ClassPathXmlApplicationContext("applicationContext.xml");        DruidDataSource dataSource = (DruidDataSource) app.getBean("dataSource3");        System.out.println(dataSource);    }
 ~~~~
 
 
 
 #### 7.1.2 lazy-init
 
-​	可以控制bean的创建时间，如果设置为true就是在第一次获取该对象的时候才去创建。
+	可以控制bean的创建时间，如果设置为true就是在第一次获取该对象的时候才去创建。
 
 ~~~~xml
-    <bean class="com.alibaba.druid.pool.DruidDataSource" lazy-init="true"  id="dataSource" name="dataSource2,dataSource3">
-        <property name="driverClassName" value="${jdbc.driver}"></property>
-        <property name="url" value="${jdbc.url}"></property>
-        <property name="username" value="${jdbc.username}"></property>
-        <property name="password" value="${jdbc.password}"></property>
-    </bean>
+    <bean class="com.alibaba.druid.pool.DruidDataSource" lazy-init="true"  id="dataSource" name="dataSource2,dataSource3">        <property name="driverClassName" value="${jdbc.driver}"></property>        <property name="url" value="${jdbc.url}"></property>        <property name="username" value="${jdbc.username}"></property>        <property name="password" value="${jdbc.password}"></property>    </bean>
 ~~~~
 
 
 
 #### 7.1.3 init-method
 
-​	可以用来设置初始化方法，设置完后容器创建完对象就会自动帮我们调用对应的方法。
+	可以用来设置初始化方法，设置完后容器创建完对象就会自动帮我们调用对应的方法。
 
 ~~~~java
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Student {
-
-    private String name;
-    private int id;
-    private int age;
-	//初始化方法
-    public void init(){
-        System.out.println("对学生对象进行初始化操作");
-    }
-
-}
-
+@Data@NoArgsConstructor@AllArgsConstructorpublic class Student {    private String name;    private int id;    private int age;	//初始化方法    public void init(){        System.out.println("对学生对象进行初始化操作");    }}
 ~~~~
 
 ~~~~xml
@@ -496,31 +279,14 @@ public class Student {
 
 #### 7.1.4 destroy-method
 
-​	可以用来设置销毁之前调用的方法，设置完后容器销毁对象前就会自动帮我们调用对应的方法。
+	可以用来设置销毁之前调用的方法，设置完后容器销毁对象前就会自动帮我们调用对应的方法。
 
 ~~~~xml
     <bean class="com.zhuyl10.spdb.Student" id="student"  destroy-method="close"></bean>
 ~~~~
 
 ~~~~java
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Student {
-
-    private String name;
-    private int id;
-    private int age;
-
-    public void init(){
-        System.out.println("对学生对象进行初始化操作");
-    }
-
-    public void close(){
-        System.out.println("对象销毁之前调用，用于释放资源");
-    }
-}
-
+@Data@NoArgsConstructor@AllArgsConstructorpublic class Student {    private String name;    private int id;    private int age;    public void init(){        System.out.println("对学生对象进行初始化操作");    }    public void close(){        System.out.println("对象销毁之前调用，用于释放资源");    }}
 ~~~~
 
 **注意：配置的方法只能是空参的。**
@@ -529,7 +295,7 @@ public class Student {
 
 #### 7.1.5 factory-bean&factory-method
 
-​	当我们需要让Spring容器使用工厂类来创建对象放入Spring容器的时候可以使用factory-bean和factory-method属性。
+	当我们需要让Spring容器使用工厂类来创建对象放入Spring容器的时候可以使用factory-bean和factory-method属性。
 
 
 
@@ -538,21 +304,13 @@ public class Student {
 配置文件中进行配置
 
 ~~~~xml
-    <!--创建实例工厂-->
-    <bean class="com.zhuyl10.factory.CarFactory" id="carFactory"></bean>
-    <!--使用实例工厂创建Car放入容器-->
-    <!--factory-bean 用来指定使用哪个工厂对象-->
-    <!--factory-method 用来指定使用哪个工厂方法-->
-    <bean factory-bean="carFactory" factory-method="getCar" id="car"></bean>
+    <!--创建实例工厂-->    <bean class="com.zhuyl10.factory.CarFactory" id="carFactory"></bean>    <!--使用实例工厂创建Car放入容器-->    <!--factory-bean 用来指定使用哪个工厂对象-->    <!--factory-method 用来指定使用哪个工厂方法-->    <bean factory-bean="carFactory" factory-method="getCar" id="car"></bean>
 ~~~~
 
 创建容器获取对象测试
 
 ~~~~java
-        ClassPathXmlApplicationContext app = new ClassPathXmlApplicationContext("applicationContext.xml");
-        //获取car对象
-        Car c = (Car) app.getBean("car");
-        System.out.println(c);
+        ClassPathXmlApplicationContext app = new ClassPathXmlApplicationContext("applicationContext.xml");        //获取car对象        Car c = (Car) app.getBean("car");        System.out.println(c);
 ~~~~
 
 
@@ -562,8 +320,7 @@ public class Student {
 配置文件中进行配置
 
 ~~~~xml
-    <!--使用静态工厂创建Car放入容器-->
-    <bean class="com.zhuyl10.factory.CarStaticFactory" factory-method="getCar" id="car2"></bean>
+    <!--使用静态工厂创建Car放入容器-->    <bean class="com.zhuyl10.factory.CarStaticFactory" factory-method="getCar" id="car2"></bean>
 ~~~~
 
 创建容器获取对象测试
@@ -579,7 +336,8 @@ public class Student {
 
 ## 1.注解开发
 
-​	为了简化配置，Spring支持使用注解代替xml配置。
+	为了简化配置，Spring支持使用注解代替xml配置。
+
 
 ​	
 
@@ -587,7 +345,7 @@ public class Student {
 
 ### 2.0 注解开发准备工作
 
-​	如果要使用注解开发必须要开启组件扫描，这样加了注解的类才会被识别出来。Spring才能去解析其中的注解。
+	如果要使用注解开发必须要开启组件扫描，这样加了注解的类才会被识别出来。Spring才能去解析其中的注解。
 
 ```xml
 <!--启动组件扫描，指定对应扫描的包路径，该包及其子包下所有的类都会被扫描，加载包含指定注解的类-->
@@ -600,19 +358,19 @@ public class Student {
 
 #### 2.1.1 @Component,@Controller,@Service ,@Repository	
 
-​	上述4个注解都是加到类上的。
-
-​	他们都可以起到类似bean标签的作用。可以把加了该注解类的对象放入Spring容器中。
-
-​	实际再使用时选择任意一个都可以。但是后3个注解是语义化注解。
-
-​	如果是Service类要求使用@Service。
-
-​	如果是Dao类要求使用@Repository
-
-​	如果是Controllerl类(SpringMVC中会学习到)要求使用@Controller
-
-​	如果是其他类可以使用@Component
+	上述4个注解都是加到类上的。
+	
+	他们都可以起到类似bean标签的作用。可以把加了该注解类的对象放入Spring容器中。
+	
+	实际再使用时选择任意一个都可以。但是后3个注解是语义化注解。
+	
+	如果是Service类要求使用@Service。
+	
+	如果是Dao类要求使用@Repository
+	
+	如果是Controllerl类(SpringMVC中会学习到)要求使用@Controller
+	
+	如果是其他类可以使用@Component
 
 
 
@@ -706,42 +464,25 @@ public class Demo {
 
 ### 2.2 DI相关注解
 
-​	如果一个bean已经放入Spring容器中了。那么我们可以使用下列注解实现属性注入，让Spring容器帮我们完成属性的赋值。
+	如果一个bean已经放入Spring容器中了。那么我们可以使用下列注解实现属性注入，让Spring容器帮我们完成属性的赋值。
 
 
 
 #### 2.2.1 @Value
 
-​	主要用于String,Integer等可以直接赋值的属性注入。不依赖setter方法，支持SpEL表达式。
+	主要用于String,Integer等可以直接赋值的属性注入。不依赖setter方法，支持SpEL表达式。
 
 例如：
 
 ```java
-@Service("userService")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserServiceImpl implements UserService {
-    private UserDao userDao;
-    @Value("199")
-    private int num;
-    @Value("三更草堂")
-    private String str;
-    @Value("#{19+3}")
-    private Integer age;
-
-
-    public void show() {
-        userDao.show();
-    }
-}
+@Service("userService")@Data@NoArgsConstructor@AllArgsConstructorpublic class UserServiceImpl implements UserService {    private UserDao userDao;    @Value("199")    private int num;    @Value("三更草堂")    private String str;    @Value("#{19+3}")    private Integer age;    public void show() {        userDao.show();    }}
 ```
 
 
 
 #### 2.2.2 @AutoWired
 
-​	Spring会给加了该注解的属性自动注入数据类型相同的对象。
+	Spring会给加了该注解的属性自动注入数据类型相同的对象。
 
 例如：
 
@@ -773,7 +514,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-​	**required属性代表这个属性是否是必须的，默认值为true。如果是true的话Spring容器中如果找不到相同类型的对象完成属性注入就会出现异常。**
+	**required属性代表这个属性是否是必须的，默认值为true。如果是true的话Spring容器中如果找不到相同类型的对象完成属性注入就会出现异常。**
 
 
 
@@ -781,7 +522,7 @@ public class UserServiceImpl implements UserService {
 
 #### 2.2.3 @Qualifier
 
-​	如果相同类型的bean在容器中有多个时，单独使用@AutoWired就不能满足要求，这时候可以再加上@Qualifier来指定bean的名字从容器中获取bean注入。
+	如果相同类型的bean在容器中有多个时，单独使用@AutoWired就不能满足要求，这时候可以再加上@Qualifier来指定bean的名字从容器中获取bean注入。
 
 例如：
 
@@ -802,9 +543,9 @@ public class UserServiceImpl implements UserService {
 
 #### @Configuration
 
-​	标注在类上，表示当前类是一个配置类。我们可以用注解类来完全替换掉xml配置文件。
-
-​	注意：如果使用配置类替换了xml配置，spring容器要使用：AnnotationConfigApplicationContext
+	标注在类上，表示当前类是一个配置类。我们可以用注解类来完全替换掉xml配置文件。
+	
+	注意：如果使用配置类替换了xml配置，spring容器要使用：AnnotationConfigApplicationContext
 
 例如：
 
@@ -820,11 +561,11 @@ public class ApplicationConfig {
 
 #### @ComponentScan
 
-​	可以用来代替context:component-scan标签来配置组件扫描。
-
-​	basePackages属性来指定要扫描的包。
-
-​	注意要加在配置类上。
+	可以用来代替context:component-scan标签来配置组件扫描。
+	
+	basePackages属性来指定要扫描的包。
+	
+	注意要加在配置类上。
 
 例如：
 
@@ -843,9 +584,9 @@ public class ApplicationConfig {
 
 #### @Bean
 
-​	可以用来代替bean标签，主要用于第三方类的注入。
-
-​	使用：定义一个方法，在方法中创建对应的对象并且作为返回值返回。然后在方法上加上@Bean注解，注解的value属性来设置bean的名称。
+	可以用来代替bean标签，主要用于第三方类的注入。
+	
+	使用：定义一个方法，在方法中创建对应的对象并且作为返回值返回。然后在方法上加上@Bean注解，注解的value属性来设置bean的名称。
 
 例如：
 
@@ -909,13 +650,13 @@ public class ApplicationConfig {
 
 #### @PropertySource
 
-​	可以用来代替context:property-placeholder，让Spring读取指定的properties文件。然后可以使用@Value来获取读取到的值。
+	可以用来代替context:property-placeholder，让Spring读取指定的properties文件。然后可以使用@Value来获取读取到的值。
 
 
 
-​	**使用：在配置类上加@PropertySource注解，注解的value属性来设置properties文件的路径。**
-
-​	**然后在配置类中定义成员变量。在成员变量上使用@Value注解来获取读到的值并给对应的成员变量赋值。**
+	**使用：在配置类上加@PropertySource注解，注解的value属性来设置properties文件的路径。**
+	
+	**然后在配置类中定义成员变量。在成员变量上使用@Value注解来获取读到的值并给对应的成员变量赋值。**
 
 
 
@@ -970,17 +711,49 @@ public class ApplicationConfig {
 
 ①SSM  
 
-​		自己项目中的类的IOC和DI都使用注解，对第三方jar包中的类，配置组件扫描时使用xml进行配置。
+		自己项目中的类的IOC和DI都使用注解，对第三方jar包中的类，配置组件扫描时使用xml进行配置。
 
 ②SpringBoot
 
-​		纯注解开发
+		纯注解开发
 
 ### Spring AOP
 
 ### Spring DAO
 
 ### Spring ORM
+
+#### 1.ORM是什么，为什么要使用ORM
+
+对象-关系映射（Object-Relational Mapping，简称ORM），面向对象的开发方法是当今企业级应用开发环境中的主流开发方法，关系数据库是企业级应用环境中永久存放数据的主流数据存储系统。对象和关系数据是业务实体的两种表现形式，业务实体在内存中表现为对象，在数据库中表现为关系数据。内存中的对象之间存在关联和继承关系，而在数据库中，关系数据无法直接表达多对多关联和继承关系。因此，对象-关系映射(ORM)系统一般以中间件的形式存在，主要实现程序对象到关系数据库数据的映射。
+
+当我们实现一个应用程序时（不使用O/R Mapping），我们可能会写特别多数据访问层的代码，从数据库保存、删除、读取对象信息，而这些代码都是重复的。而使用ORM则会大大减少重复性代码。对象关系映射（Object Relational Mapping，简称ORM），主要实现程序对象到关系数据库数据的映射。
+
+#### 2.实现一个简单的ORM持久层框架
+
+结构设计：![orm分层设计](README.assets/orm分层设计.png)
+
+**第一层为配置层：**
+
+miniORM.cfg.xml 是框架的核心配置文件，主要用来设置数据库连接信息和映射配置文件路径信息
+Xxx.mapper.xml 是框架的映射配置文件，主要用来设置类和表之间以及属性和字段之间的映射关系
+Xxx.java 是带有映射注解的实体类，主要用来设置类和表之间以及属性和字段之间的映射关系，和 Xxx.mapper.xml 的作用一样，只不过采用的是注解方式，两者二选一
+
+**第二层为解析层**
+
+Dom4jUtil 类用来解析 miniORM.cfg.xml 和Xxx.mapper.xml 两个配置文件的数据
+AnnotationUtil 类用来解析实体类中的映射注解
+
+**第三层为封装层**
+
+ORMConfig 类用来封装和存储从 miniORM.cfg.xml 文件中解析得到的数据
+Mapper 类用来封装和存储从 Xxx.mapper.xml 或实体类中解析得到的映射数据
+
+**第四层为功能层**
+
+ORMSession 类主要用来从 ORMConfig 和 Mapper 中获取相关数据，然后生成 sql 语句， 最后通过对 JDBC 的封装最终实现增删改查功能
+
+**核心代码在原理板块展示说明**
 
 ### Spring Web MVC 
 
@@ -1173,7 +946,90 @@ public class ApplicationConfig {
    </html>
    ```
 
-   最后，运行程序，验证效果。对应完整的入门搭建demo位于本项目的spring-security包中。
+4. 从数据库中验证用户名密码
+
+   上面登陆时的用户名密码为程序中写死的，如想从数据库中验证用户名密码，需进行如下配置:
+
+   * 自定义类实现UserDetailService并放入容器中,loadUserByUsername方法中返回通过用户名查找出的User对象（为了方便，这里直接返回的一个User对象）
+
+   * WebSecurityConfig类中注入自己实现的UserDetailService，auth中设置UserDetailService为刚刚注入的UserDetailService
+   
+   ```
+   @Component
+   public class MyUserDetailService implements UserDetailsService {
+     @Override
+     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+       List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList("role");
+       return new User("lucy",new BCryptPasswordEncoder().encode("123"),auth);
+     }
+   }
+   ```
+   
+   
+   
+   ```
+     @Bean
+     public PasswordEncoder passwordEncoder(){
+       return new BCryptPasswordEncoder();
+     }
+   
+     @Autowired
+     UserDetailsService userDetailsService;
+   
+     // 通过数据库查询用户名密码
+     @Override
+     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+       auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+     }
+   ```
+   
+5. 基于权限或角色进行访问控制
+
+   上面讲述了用户登录时的认证方式：通过代码中写死的用户名密码登录、通过数据库用户名密码认证。下面讲述用户访问资源时的授权。
+
+   在WebSecurityConfig中修改configure(HttpSecurity http)方法为如下：
+
+   ```
+   @Override
+     protected void configure(HttpSecurity http) throws Exception{
+       http
+           .authorizeRequests()
+               .antMatchers("/","/home").permitAll()//设置哪些路径可以直接访问
+               .antMatchers("/hello").hasAuthority("admin")//设置当前路径，需要登陆用户有哪些权限才可访问
+               .anyRequest().authenticated()//所有请求都需要权限认证（登陆认证）
+               .and()
+           .formLogin()//自定义自己编写的登陆页面
+               .loginPage("/login")//登陆页面设置
+               .permitAll()
+               .and()
+           .logout().permitAll();
+     }
+   ```
+
+   使用lucy、123进行登录后访问/hello页面报403，因为lucy无"admin"权限，无法访问/hello路径，此时需修改MyUserDetailService，给返回的lucy User对象加上amdin权限即可:
+
+   ```
+   @Component
+   public class MyUserDetailService implements UserDetailsService {
+     @Override
+     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+       List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList("admin");
+       return new User("lucy",new BCryptPasswordEncoder().encode("123"),auth);
+     }
+   }
+   ```
+
+   
+
+   * hasAuthority : 当前主体具有指定的权限时,才能访问
+
+   * hasAnyAuthority: 当前主体具有某一个权限时，均可以访问
+
+   * hasRole:当前主体具有指定的角色时,才能访问
+
+   * hasAnyRole:当前主体具有某一个角色时，均可以访问
+
+     注：role其实是特殊的authority，spring security会自动为role封装一个ROLE\_前缀,因此在数据库存储用户的角色时需为角色加上ROLE\_前缀
 
 ## 原理介绍
 

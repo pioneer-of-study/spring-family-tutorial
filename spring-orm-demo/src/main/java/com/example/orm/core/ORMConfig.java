@@ -4,7 +4,6 @@ import com.example.orm.utils.AnnotationUtil;
 import com.example.orm.utils.Dom4jUtil;
 import org.dom4j.Document;
 
-
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -34,7 +33,7 @@ public class ORMConfig {
 
     static {
         //得到classPath路径
-        String classPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+        classPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         try {
             //转码
             classPath = URLDecoder.decode(classPath, "utf-8");
