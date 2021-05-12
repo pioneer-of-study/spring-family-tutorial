@@ -15,7 +15,7 @@ import java.util.List;
 public class MyUserDetailService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList("role");
+    List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList("admin");
     return new User("lucy",new BCryptPasswordEncoder().encode("123"),auth);
   }
 }

@@ -23,7 +23,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http
         .authorizeRequests()
             .antMatchers("/","/home").permitAll()//设置哪些路径可以直接访问
-            .anyRequest().authenticated()//所有请求都需要权限认证
+            .antMatchers("/hello").hasAuthority("admin")//设置当前路径，需要登陆用户有哪些权限才可访问
+            .anyRequest().authenticated()//所有请求都需要权限认证（登陆认证）
             .and()
         .formLogin()//自定义自己编写的登陆页面
             .loginPage("/login")//登陆页面设置
@@ -33,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   //使用官网的方式自定义用户名密码
-/*  @Bean
+  /*@Bean
   @Override
   public UserDetailsService userDetailsService(){
     UserDetails user =
