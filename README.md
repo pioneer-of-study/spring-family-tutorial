@@ -758,7 +758,78 @@ public class ApplicationConfig {
            driver-class-name: com.mysql.cj.jdbc.Driver
    ```
 
-3. 
+3. #### 关于Druid的相关配置
+
+   增加依赖
+
+   ```
+   <dependency>
+         <groupId>com.alibaba</groupId>
+         <artifactId>druid</artifactId>
+         <version>1.1.3</version>
+   </dependency>
+   
+   ```
+
+   在application.yml中配置数据库连接及其他相关属性
+
+   ```
+   spring:
+       datasource:
+   #      数据源
+           type: com.alibaba.druid.pool.DruidDataSource
+   #      数据库连接驱动
+           driverClassName: com.mysql.jdbc.Driver
+   #
+           druid:
+               default:  #默认数据源
+   #
+                 url: jdbc:mysql://localhost:3306/数据库?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+                 username: 账户
+                 password: 密码
+   #           初始化建立的物理连接数
+               initial-size: 10
+   #           最大连接池数量
+               max-active: 1000
+   #           最小连接池数量
+               min-idle: 10
+   #           获取连接时最大等待时间
+               max-wait: 60000
+   #            是否缓存preparedStatement
+               pool-prepared-statements: true
+                # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。
+               max-pool-prepared-statement-per-connection-size: 20
+   #             有两个含义：1) Destroy线程会检测连接的间隔时间，如果连接空闲时间大于等于minEvictableIdleTimeMillis则关闭物理连接。
+   #                        2) testWhileIdle的判断依据，详细看testWhileIdle属性的说明
+               time-between-eviction-runs-millis: 60000
+   #            连接保持空闲而不被驱逐的最小时间
+               min-evictable-idle-time-millis: 300000
+   #            用来检测连接是否有效的sql，要求是一个查询语句，常用SELECT 1 FROM DUAL。
+               validation-query: SELECT 1 FROM DUAL
+   #            建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+               test-while-idle: true
+   #            申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+               test-on-borrow: false
+   #            归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+               test-on-return: false
+   #            监控页面相关配置
+               stat-view-servlet:
+                   enabled: true
+                   url-pattern: /druid/
+                   #login-username: admin
+                   #login-password: 123456
+   #                filter相关配置
+               filter:
+                   stat:
+                       log-slow-sql: true
+                       slow-sql-millis: 1000
+                       merge-sql: true
+                   wall:
+                       config:
+                           multi-statement-allow: true
+   ```
+
+   
 
 ### Spring ORM
 
