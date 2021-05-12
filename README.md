@@ -717,7 +717,345 @@ public class ApplicationConfig {
 
 		纯注解开发
 
+
+
 ### Spring AOP
+
+# SpringBoot中的AOP处理
+
+## 1 理解AOP
+
+### 1.1 什么是AOP
+
+​		AOP（Aspect Oriented Programming），面向切面思想，是Spring的三大核心思想之一（两外两个：IOC-控制反转、DI-依赖注入）。
+
+​		那么AOP为何那么重要呢？在我们的程序中，经常存在一些系统性的需求，比如权限校验、日志记录、统计等，这些代码会散落穿插在各个业务逻辑中，非常冗余且不利于维护。例如下面这个示意图：
+
+![1](C:\Users\Administrator\Desktop\1.jpg)
+
+​		有多少业务操作，就要写多少重复的校验和日志记录代码，这显然是无法接受的。当然，用面向对象的思想，我们可以把这些重复的代码抽离出来，写成公共方法，就是下面这样：
+
+![2](C:\Users\Administrator\Desktop\2.png)
+
+​		这样，代码冗余和可维护性的问题得到了解决，但每个业务方法中依然要依次手动调用这些公共方法，也是略显繁琐。有没有更好的方式呢？有的，那就是AOP，AOP将权限校验、日志记录等非业务代码完全提取出来，与业务代码分离，并寻找节点切入业务代码中：
+
+![3](C:\Users\Administrator\Desktop\3.png)
+
+### 1.2 AOP体系与概念
+
+​		**简单去理解，其实AOP要做三类事：**
+
+​				在哪里切入，也就是权限校验等非业务操作在哪些业务代码中执行。
+
+​				在什么时候切入，是业务代码执行前还是执行后。
+
+​				切入后做什么事，比如做权限校验、日志记录等。
+
+​			因此，AOP的体系可以梳理为下图：
+
+![](C:\Users\Administrator\Desktop\4.png)
+
+​		**概念详解：**
+
+​			Pointcut：切点，决定处理如权限校验、日志记录等在何处切入业务代码中（即织入切面）。切点分为execution方式和annotation方式。前者可以用路径				表达式指定哪些类织入切面，后者可以指定被哪些注解修饰的代码织入切面。
+
+​			Advice：处理，包括处理时机和处理内容。处理内容就是要做什么事，比如校验权限和记录日志。处理时机就是在什么时机执行处理内容，分为前置处理				（即业务代码执行前）、后置处理（业务代码执行后）等。
+
+​			Aspect：切面，即Pointcut和Advice。
+
+​			Joint point：连接点，是程序执行的一个点。例如，一个方法的执行或者一个异常的处理。在 Spring AOP 中，一个连接点总是代表一个方法执行。
+
+​			Weaving：织入，就是通过动态代理，在目标对象方法中执行处理内容的过程。
+
+
+![](C:\Users\Administrator\Desktop\5.png)
+
+
+
+## 2 装配AOP
+
+使用 AOP，首先需要引入 **AOP 的依赖**。
+
+```java
+<!--Aop依赖-->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-aop</artifactId>
+</dependency>
+```
+
+注意：在完成了引入AOP依赖包后，一般来说并不需要去做其他配置。使用过Spring注解配置方式的人会问是否需要在程序主类中增加@EnableAspectJAutoProxy来启用，实际并不需要。
+
+因为在AOP的默认配置属性中，spring.aop.auto属性默认是开启的，也就是说只要引入了AOP依赖后，默认已经增加了@EnableAspectJAutoProxy。
+
+### 2.1 第一个示例：对所有的web请求做切面来记录日志
+
+#### 2.1.1 实现一个简单的web请求入口
+
+```java
+@RestController
+@RequestMapping("/demo")
+public class DemoController {
+
+    @GetMapping("/echo")
+    public List<String> echo() {
+        // 查询列表
+        List<String> result = new ArrayList<>();
+        result.add("hanf4");
+        result.add("xuy7");
+        result.add("xiaoh6");
+        return result;
+    }
+
+    @PostMapping("/addUser")
+    @PermissionAnnotation
+    public JSONObject  addUser(@RequestBody JSONObject request){
+        return JSON.parseObject("{\"message\":\"SUCCESS\",\"code\":200}");
+    }
+}
+```
+
+#### 2.1.2 定义切面类，实现web层的日志切面
+
+要想把一个类变成切面类，需要两步：
+ 	1) 在类上使用 @Component 注解 把切面类加入到IOC容器中 
+	 2) 在类上使用 @Aspect 注解 使之成为切面类
+
+```java
+@Component
+@Aspect
+public class DemoAspect {
+    private Logger logger = LoggerFactory.getLogger(DemoAspect.class);
+    //前置通知
+    @Before("execution(public * Demo.controller.DemoController.*(..))")
+    public void doBefore(JoinPoint joinPoint) throws Throwable {
+        // 接收到请求，记录请求内容
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        // 记录下请求内容
+        logger.info("URL : " + request.getRequestURL().toString());
+        logger.info("HTTP_METHOD : " + request.getMethod());
+        logger.info("IP : " + request.getRemoteAddr());
+        logger.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+        logger.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));
+    }
+    // 在执行前后执行:
+    @Around("execution(public * Demo.controller.DemoController.*(..))")
+    public Object doLogging(ProceedingJoinPoint pjp) throws Throwable {
+        System.out.println();
+        logger.info("[Around] start " + pjp.getSignature());
+        Object retVal = pjp.proceed();
+        logger.info("[Around] done " + pjp.getSignature());
+        return retVal;
+    }
+}
+```
+
+观察`doBefore()`方法，我们定义了一个`@Before`注解，后面的字符串是告诉AspectJ应该在何处执行该方法，这里写的意思是：执行`DemoController`的每个`public`方法前执行`doBefore()`代码。
+
+再观察`doLogging()`方法，我们定义了一个`@Around`注解，它和`@Before`不同，`@Around`可以决定是否执行目标方法，因此，我们在`doLogging()`内部先打印日志，再调用方法，最后打印日志后返回结果。
+
+在`DemoAspect`类的声明处，除了用`@Component`表示它本身也是一个Bean外，我们再加上`@Aspect`注解，表示它的`@Before`标注的方法需要注入到`DemoController`的每个`public`方法执行前，`@Around`标注的方法需要注入到`DemoController`的每个`public`方法执行前后。
+
+```java
+2021-05-12 10:49:20.421  INFO 15004 --- [nio-8080-exec-2] Demo.aspect.DemoAspect                   : [Around] start List Demo.controller.DemoController.echo()
+2021-05-12 10:49:20.421  INFO 15004 --- [nio-8080-exec-2] Demo.aspect.DemoAspect                   : URL : http://127.0.0.1:8080/demo/echo
+2021-05-12 10:49:20.421  INFO 15004 --- [nio-8080-exec-2] Demo.aspect.DemoAspect                   : HTTP_METHOD : GET
+2021-05-12 10:49:20.422  INFO 15004 --- [nio-8080-exec-2] Demo.aspect.DemoAspect                   : IP : 127.0.0.1
+2021-05-12 10:49:20.423  INFO 15004 --- [nio-8080-exec-2] Demo.aspect.DemoAspect                   : CLASS_METHOD : Demo.controller.DemoController.echo
+2021-05-12 10:49:20.423  INFO 15004 --- [nio-8080-exec-2] Demo.aspect.DemoAspect                   : ARGS : []
+hanf4*****
+2021-05-12 10:49:20.423  INFO 15004 --- [nio-8080-exec-2] Demo.aspect.DemoAspect                   : [Around] done List Demo.controller.DemoController.echo()
+```
+
+### 2.2 第二个示例：使用自定义AOP注释并对应多个切面类
+
+#### 2.2.1 自定义一个注解PermissionsAnnotation
+
+使用@Target、@Retention、@Documented自定义一个注解
+
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface PermissionAnnotation{
+}
+```
+
+#### 2.2.2 创建两个切面类，切点设置为拦截所有标注`PermissionsAnnotation`的方法
+
+创建第一个AOP切面类，，只要在类上加个 @Aspect 注解即可。@Aspect 注解用来描述一个切面类，定义切面类的时候需要打上这个注解。@Component 注解将该类交给 Spring 来管理。在这个类里实现id权限校验逻辑：
+
+```java
+@Component
+@Aspect
+@Order(1)
+public class Demo1Aspect {
+    @Pointcut("@annotation(Demo.customAnnotation.PermissionAnnotation)")
+    private void PermissionCheck(){}
+    //验证输入的id号
+    @Around("PermissionCheck()")
+    public Object permissionCheck(ProceedingJoinPoint pjp) throws Throwable{
+        System.out.println("==========第一个切面=========");
+
+        Object[] args = pjp.getArgs();
+        Long id = ((JSONObject) args[0]).getLong("id");
+        String name = ((JSONObject) args[0]).getString("name");
+        System.out.println("--->"+id);
+        System.out.println("--->"+name);
+        if(id<0){
+            System.out.println("{\"message\":\"illegal id\",\"code\":403}");
+            return JSONObject.parseObject("{\"message\":\"illegal id\",\"code\":403}");
+        }
+        return pjp.proceed();
+    }
+}
+```
+
+创建第二个AOP切面类，在这个类里实现用户名权限校验：
+
+```java
+@Component
+@Aspect
+@Order(0)
+public class Demo2Aspect {
+    @Pointcut("@annotation(Demo.customAnnotation.PermissionAnnotation)")
+    private void PermissionCheck(){}
+    //验证输入的用户名
+    @Around("PermissionCheck()")
+    public Object permissionCheck(ProceedingJoinPoint pjp) throws Throwable{
+        System.out.println("==========第二个切面=========");
+        Object[] args = pjp.getArgs();
+        Long id = ((JSONObject) args[0]).getLong("id");
+        String name = ((JSONObject) args[0]).getString("name");
+        System.out.println("--->"+id);
+        System.out.println("--->"+name);
+        if(!name.equals("hanf")){
+            System.out.println("{\"message\":\"not admin\",\"code\":402}");
+            return JSONObject.parseObject("{\"message\":\"not admin\",\"code\":402}");
+        }
+        return pjp.proceed();
+    }
+}
+```
+
+我们可以看到，我们在两个切面类所定义的切点都是PermissionAnnotation注释所标注的方法，当一个自定义的`AOP`注解可以对应多个切面类，那么这些**这些切面的执行顺序如何管理**？
+
+其实，这些切面类执行顺序由`@Order`注解管理，该注解后的数字越小，所在切面类越先执行。（这里注意，越后执行不代表不执行，如果**之前的切面验证条件都通过**，那么便会按着`@Order`定义的优先级顺序执行到它）
+
+#### 2.2.3 创建接口类，在目标方法上标注自定义注解PermissionsAnnotation
+
+```java
+@RestController
+@RequestMapping("/demo")
+public class DemoController {
+
+    @GetMapping("/echo")
+    public List<String> echo() {
+        // 查询列表
+        List<String> result = new ArrayList<>();
+        result.add("hanf4");
+        result.add("xuy7");
+        result.add("xiaoh6");
+        System.out.println("hanf4*****");
+        return result;
+    }
+
+    @PostMapping("/addUser")
+    @PermissionAnnotation
+    public JSONObject  addUser(@RequestBody JSONObject request){
+        return JSON.parseObject("{\"message\":\"SUCCESS\",\"code\":200}");
+    }
+}
+```
+
+这里我们还是使用了示例一中的接口类，在第二个方法上标注了自定义注释
+
+#### 2.2.4 测试
+
+我们构造两个参数都异常的情况：
+
+![7](C:\Users\Administrator\Desktop\7.PNG)
+
+响应结果，表面第二个切面类执行顺序更靠前：
+
+![6](C:\Users\Administrator\Desktop\6.PNG)
+
+## 3 AOP相关注解
+
+### 3.1 @Pointcut
+
+`@Pointcut` 注解，用来定义一个切点，即上文中所关注的某件事情的入口，切入点定义了事件触发时机。
+
+```java
+@Aspect@Componentpublic class LogAspectHandler {    /**     * 定义一个切面，拦截 com.itcodai.course09.controller 包和子包下的所有方法     */    @Pointcut("execution(* com.mutest.controller..*.*(..))")    public void pointCut() {}}
+```
+
+```java
+@Component@Aspect@Order(1)public class Demo1Aspect {        /////////////////////////////////////////////    @Pointcut("@annotation(Demo.customAnnotation.PermissionAnnotation)") //    ////////////////////////////////////////////        private void PermissionCheck(){}    //验证输入的id号    @Around("PermissionCheck()")    public Object permissionCheck(ProceedingJoinPoint pjp) throws Throwable{        System.out.println("==========第一个切面=========");        Object[] args = pjp.getArgs();        Long id = ((JSONObject) args[0]).getLong("id");        String name = ((JSONObject) args[0]).getString("name");        System.out.println("--->"+id);        System.out.println("--->"+name);        if(id<0){            System.out.println("{\"message\":\"illegal id\",\"code\":403}");            return JSONObject.parseObject("{\"message\":\"illegal id\",\"code\":403}");        }        return pjp.proceed();    }}
+```
+
+​	@Pointcut 注解指定一个切点，定义需要拦截的东西，这里介绍两个常用的表达式：**一个是使用 `execution()`，另一个是使用 `annotation()`。**我们第一个示例使用的是execution()指定切点的写法，第二个示例使用的是annotation()的写法，这里推荐第二种写法，上面的代码也是用第二种写法。因为第一种方法基本能实现无差别全覆盖，即某个包下面的所有Bean的所有方法都会被这个切面方法拦截，这种非精准打击误伤面很大，因为不恰当的范围，容易导致意想不到的结果，即很多不需要AOP代理的Bean也被自动代理了，并且，后续新增的Bean，如果不清楚现有的AOP装配规则，容易被强迫装配。
+
+​	使用AOP时，被装配的Bean最好自己能清清楚楚地知道自己被安排了。
+
+**execution表达式：**
+
+​	以 execution(* * com.mutest.controller..*.*(..))) 表达式为例：
+
+​		第一个 * 号的位置：表示返回值类型，* 表示所有类型。
+​		包名：表示需要拦截的包名，后面的两个句点表示当前包和当前包的所有子包，在本例中指 com.mutest.controller包、子包下所有类的方法。
+​		第二个 * 号的位置：表示类名，* 表示所有类。
+
+​		(..)：这个星号表示方法名，* 表示所有的方法，后面括弧里面表示方法的参数，两个句点表示任何参数。
+
+**annotation() 表达式：**
+
+​	annotation() 方式是针对某个注解来定义切点。
+
+```java
+@Pointcut("@annotation(org.springframework.web.bind.annotation.PostMapping)")public void annotationPointcut() {}
+```
+
+​	然后使用该切面的话，就会切入注解是 `@PostMapping` 的所有方法。这种方式很适合处理 `@GetMapping、@PostMapping、@DeleteMapping`不同注解有各种特定处理逻辑的场景。
+
+还有就是如上面案例所示，针对自定义注解来定义切面。
+
+```java
+@Pointcut("@annotation(com.example.demo.PermissionsAnnotation)")private void permissionCheck() {}
+```
+
+### 3.2 @Around
+
+@Around注解用于修饰Around增强处理，Around增强处理非常强大，表现在：
+
+  		1. @Around可以自由选择增强动作与目标方法的执行顺序，也就是说可以在增强动作前后，甚至过程中执行目标方法。这个特性的实现在于，调用					ProceedingJoinPoint参数的procedd()方法才会执行目标方法。	2. @Around可以改变执行目标方法的参数值，也可以改变执行目标方法之后的返回值。
+
+Around增强处理有以下特点：
+
+  		1. 当定义一个Around增强处理方法时，该方法的第一个形参必须是 ProceedingJoinPoint 类型（至少一个形参）。在增强处理方法体内，调用ProceedingJoinPoint的proceed方法才会执行目标方法：这就是@Around增强处理可以完全控制目标方法执行时机、如何执行的关键；如果程序没有调用ProceedingJoinPoint的proceed方法，则目标方法不会执行。	2. 调用ProceedingJoinPoint的proceed方法时，还可以传入一个Object[ ]对象，该数组中的值将被传入目标方法作为实参——这就是Around增强处理方法可以改变目标方法参数值的关键。这就是如果传入的Object[ ]数组长度与目标方法所需要的参数个数不相等，或者Object[ ]数组元素与目标方法所需参数的类型不匹配，程序就会出现异常。
+
+@Around功能虽然强大，但通常需要在线程安全的环境下使用。因此，如果使用普通的Before、AfterReturning就能解决的问题，就没有必要使用Around了。如果需要目标方法执行之前和之后共享某种状态数据，则应该考虑使用Around。尤其是需要使用增强处理阻止目标的执行，或需要改变目标方法的返回值时，则只能使用Around增强处理了。
+
+### 3.3 @Before
+
+**`@Before` 注解指定的方法在切面切入目标方法之前执行**，可以做一些 `Log` 处理，也可以做一些信息的统计，比如获取用户的请求 `URL`以及用户的 `IP` 地址等等，这个在做个人站点的时候都能用得到，都是常用的方法。
+
+### 3.4 @After
+
+`@After` 注解和 `@Before` 注解相对应，指定的方法在切面切入目标方法之后执行，也可以做一些完成某方法之后的 Log 处理。
+
+### 3.5 @AfterReturning
+
+`@AfterReturning` 注解和 `@After` 有些类似，区别在于 `@AfterReturning` 注解可以用来捕获切入方法执行完之后的返回值，对返回值进行业务逻辑上的增强处理。
+
+需要注意的是，在 `@AfterReturning` 注解 中，属性 `returning` 的值必须要和参数保持一致，否则会检测不到。
+
+### 3.6 @AfterThrowing
+
+当被切方法执行过程中抛出异常时，会进入 `@AfterThrowing` 注解的方法中执行，在该方法中可以做一些异常的处理逻辑。要注意的是 `throwing` 属性的值必须要和参数一致，否则会报错。该方法中的第二个入参即为抛出的异常。
+
+
 
 ### Spring DAO
 
@@ -1148,6 +1486,10 @@ ORMSession 类主要用来从 ORMConfig 和 Mapper 中获取相关数据，然�
 ### Spring Context
 
 ### Spring AOP
+
+
+
+
 
 ### Spring DAO
 
