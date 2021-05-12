@@ -11,7 +11,6 @@
 
 ### Spring Context
 
-```
 # Spring-context-xml配置方式
 
 ## 1.Spring简介
@@ -591,7 +590,7 @@ public class Student {
 
   如果要使用注解开发必须要开启组件扫描，这样加了注解的类才会被识别出来。Spring才能去解析其中的注解。
 
-​```xml
+```xml
 <!--启动组件扫描，指定对应扫描的包路径，该包及其子包下所有的类都会被扫描，加载包含指定注解的类-->
 <context:component-scan base-package="com.zhuyl10"/>
 ​```
@@ -645,9 +644,9 @@ public class UserDaoImpl implements UserDao {
     }
 }
 
-​```
+```
 
-​```java
+```java
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -660,9 +659,9 @@ public class Phone {
 
 }
 
-​```
+```
 
-​```java
+```java
 @Service("userService")
 @Data
 @NoArgsConstructor
@@ -671,9 +670,9 @@ public class UserServiceImpl implements UserService {
 
 
     private UserDao userDao;
-
+    
     private int num;
-
+    
     private String str;
 
 
@@ -682,13 +681,13 @@ public class UserServiceImpl implements UserService {
     }
 }
 
-​```
+```
 
 
 
 测试类如下：
 
-​```java
+```java
 public class Demo {
     public static void main(String[] args) {
         //创建容器
@@ -756,12 +755,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
-
+    
     @Value("199")
     private int num;
     @Value("三更草堂")
     private String str;
-
+    
     @Value("#{19+3}")
     private Integer age;
 
@@ -771,7 +770,7 @@ public class UserServiceImpl implements UserService {
     }
 }
 
-​```
+```
 
 
 
@@ -787,12 +786,12 @@ public class UserServiceImpl implements UserService {
 
 例如：
 
-​```java
+```java
     @Autowired
     @Qualifier("userDao2")
     private UserDao userDao;
 
-​```
+```
 
 
 
@@ -810,13 +809,13 @@ public class UserServiceImpl implements UserService {
 
 例如：
 
-​```java
+```java
 @Configuration
 public class ApplicationConfig {
 }
 
 
-​```
+```
 
 
 
@@ -830,14 +829,14 @@ public class ApplicationConfig {
 
 例如：
 
-​```java
+```java
 @Configuration
 @ComponentScan(basePackages = "com.zhuyl10")//指定要扫描的包
 public class ApplicationConfig {
 }
 
 
-​```
+```
 
 
 
@@ -851,7 +850,7 @@ public class ApplicationConfig {
 
 例如：
 
-​```java
+```java
 @Configuration
 @ComponentScan(basePackages = "com.zhuyl10")
 public class ApplicationConfig {
@@ -960,7 +959,7 @@ public class ApplicationConfig {
 
 }
 
-​```
+```
 
 
 
@@ -977,7 +976,6 @@ public class ApplicationConfig {
 ②SpringBoot
 
      纯注解开发
-```
 
 ### Spring AOP
 
@@ -1032,7 +1030,7 @@ ORMSession 类主要用来从 ORMConfig 和 Mapper 中获取相关数据，然�
 
    该Web应用程序包括两个简单的视图：主页和“ Hello，World”页面。主页在以下Thymeleaf模板（来自中`src/main/resources/templates/home.html`）中定义：
 
-   ```
+```
    <!DOCTYPE html>
    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
        <head>
@@ -1040,11 +1038,11 @@ ORMSession 类主要用来从 ORMConfig 和 Mapper 中获取相关数据，然�
        </head>
        <body>
            <h1>Welcome!</h1>
-           
+
            <p>Click <a th:href="@{/hello}">here</a> to see a greeting.</p>
        </body>
    </html>
-   ```
+```
 
    此简单视图包括指向`/hello`页面的链接，该链接在以下Thymeleaf模板（来自中`src/main/resources/templates/hello.html`）中定义：
 
