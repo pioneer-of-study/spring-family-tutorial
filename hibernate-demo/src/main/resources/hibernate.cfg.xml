@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='gb2312'?>
+<!--表明解析本XML文件的DTD文档位置，DTD是Document Type Definition 的缩写,即文档类型的定义,XML解析器使用DTD文档来检查XML文件的合法性。hibernate.sourceforge.net/hibernate-configuration-3.0dtd可以在Hibernate3.1.3软件包中的src\org\hibernate目录中找到此文件-->
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name = "connection.url">jdbc:mysql:///orm?characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=Asia/Shanghai</property>
+        <property name="connection.driverClass">com.mysql.jdbc.Driver</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">root</property>
+
+<!--        选项配置-->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <!--方言-->
+        <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+        <!--是否在后台显示Hibernate用到的SQL语句 -->
+        <property name="show_sql">true</property>
+
+<!--        映射配置文件的路径-->
+<!--        <mapping resource="Book.hbm.xml"/>-->
+<!--        配置包含有注解的实体类-->
+        <mapping class="entity.Book"/>
+    </session-factory>
+</hibernate-configuration>
