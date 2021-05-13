@@ -65,7 +65,7 @@ public class ORMSession {
             if (mapper.getClassName().equals(entity.getClass().getName())) {
                 //3.得到我们想要的mapper对象，并得到表名
                 String tableName = mapper.getTableName();
-                deleteSQL += tableName + "where";
+                deleteSQL += tableName + " where ";
                 //4.得到主键字段名和属性名
                 Object[] idProp = mapper.getIdMapper().keySet().toArray();  //idProp[0]
                 Object[] idColumn = mapper.getIdMapper().values().toArray();    //idColumn[0]
@@ -74,7 +74,7 @@ public class ORMSession {
                 field.setAccessible(true);
                 String idVal = field.get(entity).toString();
                 //6.拼接SQL
-                deleteSQL += idColumn + "=" + idVal;
+                deleteSQL += idColumn[0].toString() + "=" + idVal;
                 break;
             }
         }
@@ -88,7 +88,7 @@ public class ORMSession {
 
     //根据主键进行查询  select * from 表名 where 主键字段 = 值
     public Object findOne(Class clz,Object id) throws Exception {
-        String querySQL = "select * from";
+        String querySQL = "select * from ";
         //1.从ORMConfig中得到存有映射信息的集合
         List<Mapper> mapperList = ORMConfig.mapperList;
         //2.遍历集合拿到想要的mapper对象
@@ -100,12 +100,12 @@ public class ORMSession {
                 //4.获得主键字段名
                 Object[] idColumn = mapper.getIdMapper().values().toArray();
                 //5.拼接sql
-                querySQL += tableName + "where" + idColumn[0].toString() + "=" + id;
+                querySQL += tableName + " where " + idColumn[0].toString() + "=" + id;
                 break;
             }
         }
         //把SQL语句打印到控制台
-        System.out.println("miniORM-save" + querySQL);
+        System.out.println("miniORM-save " + querySQL);
         //6.通过JDBC发送并执行SQL语句,拿到结果集
         PreparedStatement statement = connection.prepareStatement(querySQL);
         ResultSet rs = statement.executeQuery();

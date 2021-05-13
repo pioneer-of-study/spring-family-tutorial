@@ -15,11 +15,14 @@ public class BookDao {
         ORMSession session = config.buildORMSession();
         //3.创建实体类对象并保存
         Book book = new Book();
-        book.setId(188);
+        book.setId(288);
         book.setName("spring-boot");
         book.setAuthor("李清照");
         book.setPrice(98.5);
-        session.save(book);
+//        session.save(book);
+//        session.delete(book);
+        Book one = (Book)session.findOne(Book.class, 188);
+        System.out.println(one);
         //4.释放资源
         session.close();
     }
