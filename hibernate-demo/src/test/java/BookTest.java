@@ -18,7 +18,7 @@ public class BookTest {
         Transaction tx = session.beginTransaction();
 
         Book book = new Book();
-        book.setName("朝花夕拾");
+        book.setName("唐诗三百首");
         book.setAuthor("鲁迅");
         book.setPrice(98);
         session.save(book);

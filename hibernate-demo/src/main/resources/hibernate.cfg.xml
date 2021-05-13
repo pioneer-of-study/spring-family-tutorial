@@ -18,8 +18,8 @@
         <property name="show_sql">true</property>
 
 <!--        映射配置文件的路径-->
-        <mapping resource="Book.hbm.xml"/>
+<!--        <mapping resource="Book.hbm.xml"/>-->
 <!--        配置包含有注解的实体类-->
-        <mapping package="entity"/>
+        <mapping class="entity.Book"/>
     </session-factory>
 </hibernate-configuration>
