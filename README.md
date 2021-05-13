@@ -1511,6 +1511,10 @@ ORMSession 类主要用来从 ORMConfig 和 Mapper 中获取相关数据，然�
 
 
 
+![image-20210513104847296](C:\Users\hu_qiang\AppData\Roaming\Typora\typora-user-images\image-20210513104847296.png)
+
+
+
 ##### 过滤器如何加载的
 
 使用spring security配置过滤器
@@ -1561,3 +1565,9 @@ ORMSession 类主要用来从 ORMConfig 和 Mapper 中获取相关数据，然�
    * 自定义实现类
 
 ###### 授权
+
+
+
+
+
+spring security 中各类关系的详细解释：https://blog.csdn.net/liuminglei1987/article/details/103963070
