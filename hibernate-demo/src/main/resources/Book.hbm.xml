@@ -1,0 +1,18 @@
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!--实体类和表之间的额映射关系-->
+<hibernate-mapping>
+    <class name="entity.Book" table="t_book">
+        <id name="id" >
+            <column name="bid"/>
+            <generator class="identity"></generator>
+        </id>
+
+        <property name="name" column="bname"></property>
+
+        <property name="author" column="author"></property>
+
+        <property name="price" column="price"></property>
+    </class>
+</hibernate-mapping>

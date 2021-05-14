@@ -9,7 +9,7 @@
     <property name="connection.password">root</property>
 
     <!--        映射配置文件的路径-->
-    <mapping resource="Book.mapping.xml"/>
+<!--    <mapping resource="Book.mapping.xml"/>-->
 
     <!--        配置包含有注解的实体类-->
     <!--        <mapping class = "com.entity.Book"/>-->
