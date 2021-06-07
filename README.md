@@ -11,7 +11,7 @@
 
 ## Spring Context
 
-Spring-context-xml配置方式
+### Spring-context-xml配置方式
 
 #### 1.Spring简介
 
@@ -719,7 +719,7 @@ public class ApplicationConfig {
 
 
 
-### Spring AOP
+## Spring AOP
 
 # SpringBoot中的AOP处理
 
