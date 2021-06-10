@@ -5,15 +5,15 @@
 
 -----------------
 
-## 简单入门介绍
+# 简单入门介绍
 
-### Spring Core
+## Spring Core
 
-### Spring Context
+## Spring Context
 
-# Spring-context-xml配置方式
+### Spring-context-xml配置方式
 
-## 1.Spring简介
+#### 1.Spring简介
 
 	 Spring是一个开源框架，它由[Rod Johnson](https://baike.baidu.com/item/Rod Johnson)创建。它是为了解决企业应用开发的复杂性而创建的。 
 	
@@ -21,18 +21,18 @@
 	
 	 Spring的核心就是 控制反转(IoC)和面向切面(AOP) 。
 
-## 2.IOC控制反转
+#### 2.IOC控制反转
 
-### 2.1 概念
+##### 2.1 概念
 
 	控制反转，之前对象的控制权在类手上，现在反转后到了Spring手上。
 
 
 ​	
 
-### 2.2 入门案例
+##### 2.2 入门案例
 
-#### ①导入依赖
+###### ①导入依赖
 
 导入SpringIOC相关依赖
 
@@ -44,7 +44,7 @@
         </dependency>
 ~~~~
 
-#### ②编写配置文件
+###### ②编写配置文件
 
 在resources目录下创建applicationContext.xml文件，文件名可以任意取。但是建议叫applicationContext。
 
@@ -69,7 +69,7 @@
 
 
 
-#### ③创建容器从容器中获取对象并测试
+###### ③创建容器从容器中获取对象并测试
 
 ~~~~java
     public static void main(String[] args) {
@@ -86,17 +86,17 @@
 
 
 
-### 2.3 Bean的常用属性配置
+##### 2.3 Bean的常用属性配置
 
-#### 2.3.1 id
+###### 2.3.1 id
 
 	bean的唯一标识，同一个Spring容器中不允许重复
 
-#### 2.3.2 class
+###### 2.3.2 class
 
 	全类名，用于反射创建对象
 
-#### 2.3.3 scope 
+###### 2.3.3 scope 
 
 	scope主要有两个值：singleton和prototype
 	
@@ -106,14 +106,14 @@
 
 
 
-## 3.DI依赖注入
+#### 3.DI依赖注入
 
 	依赖注入可以理解成IoC的一种应用场景，反转的是对象间依赖关系维护权。
 
 
 ​	
 
-### 3.1 set方法注入
+##### 3.1 set方法注入
 
 在要注入属性的bean标签中进行配置。前提是该类有提供属性对应的set方法。
 
@@ -127,7 +127,7 @@ package com.zhuyl10.spdb;public class Student {    private String name;    priva
 
 
 
-### 3.2 有参构造注入
+##### 3.2 有参构造注入
 
 在要注入属性的bean标签中进行配置。前提是该类有提供对应的有参构造。
 
@@ -141,7 +141,7 @@ public class Student {    private String name;    private int id;    private int
 
 
 
-### 3.3 复杂类型属性注入
+##### 3.3 复杂类型属性注入
 
 实体类如下：
 
@@ -163,15 +163,15 @@ public class Student {    private String name;    private int id;    private int
 
 
 
-## 4.Lombok
+#### 4.Lombok
 
-### ①导入依赖
+##### ①导入依赖
 
 ~~~~xml
         <dependency>            <groupId>org.projectlombok</groupId>            <artifactId>lombok</artifactId>            <version>1.18.16</version>        </dependency>
 ~~~~
 
-### ②增加注解
+##### ②增加注解
 
 ~~~~java
 @Data //根据属性生成set，get方法@NoArgsConstructor //生成空参构造@AllArgsConstructor //生成全参构造public class Phone {    private double price;    private String name;    private String password;    private String path;}
@@ -179,7 +179,7 @@ public class Student {    private String name;    private int id;    private int
 
 
 
-## 5.SPEL
+#### 5.SPEL
 
 	我们可以再配置文件中使用SPEL表达式。写法如下:
 
@@ -191,13 +191,13 @@ public class Student {    private String name;    private int id;    private int
 
 
 
-## 6.配置文件
+#### 6.配置文件
 
-### 6.1 读取properties文件
+##### 6.1 读取properties文件
 
 	我们可以让Spring读取properties文件中的key/value，然后使用其中的值。
 
-#### ①设置读取properties
+###### ①设置读取properties
 
 在Spring配置文件中加入如下标签：指定要读取的文件的路径。
 
@@ -211,7 +211,7 @@ public class Student {    private String name;    private int id;    private int
 
 **注意：context命名空间的引入是否正确**
 
-#### ②使用配置文件中的值
+###### ②使用配置文件中的值
 
 在我们需要使用的时候可以使用${key}来表示具体的值。注意要再value属性中使用才可以。例如：
 
@@ -221,7 +221,7 @@ public class Student {    private String name;    private int id;    private int
 
 
 
-### 6.2 引入Spring配置文件
+##### 6.2 引入Spring配置文件
 
 	我们可以在主的配置文件中通过import标签的resource属性，引入其他的xml配置文件
 
@@ -231,11 +231,11 @@ public class Student {    private String name;    private int id;    private int
 
 
 
-## 7. 低频知识点
+#### 7. 低频知识点
 
-### 7.1 bean的配置
+##### 7.1 bean的配置
 
-#### 7.1.1 name属性
+###### 7.1.1 name属性
 
 	我们可以用name属性来给bean取名。例如：
 
@@ -251,7 +251,7 @@ public class Student {    private String name;    private int id;    private int
 
 
 
-#### 7.1.2 lazy-init
+###### 7.1.2 lazy-init
 
 	可以控制bean的创建时间，如果设置为true就是在第一次获取该对象的时候才去创建。
 
@@ -261,7 +261,7 @@ public class Student {    private String name;    private int id;    private int
 
 
 
-#### 7.1.3 init-method
+###### 7.1.3 init-method
 
 	可以用来设置初始化方法，设置完后容器创建完对象就会自动帮我们调用对应的方法。
 
@@ -277,7 +277,7 @@ public class Student {    private String name;    private int id;    private int
 
 
 
-#### 7.1.4 destroy-method
+###### 7.1.4 destroy-method
 
 	可以用来设置销毁之前调用的方法，设置完后容器销毁对象前就会自动帮我们调用对应的方法。
 
@@ -293,13 +293,13 @@ public class Student {    private String name;    private int id;    private int
 
 
 
-#### 7.1.5 factory-bean&factory-method
+###### 7.1.5 factory-bean&factory-method
 
 	当我们需要让Spring容器使用工厂类来创建对象放入Spring容器的时候可以使用factory-bean和factory-method属性。
 
 
 
-##### 7.1.5.1 配置实例工厂创建对象
+7.1.5.1 配置实例工厂创建对象
 
 配置文件中进行配置
 
@@ -315,7 +315,7 @@ public class Student {    private String name;    private int id;    private int
 
 
 
-##### 7.1.5.2 配置静态工厂创建对象
+7.1.5.2 配置静态工厂创建对象
 
 配置文件中进行配置
 
@@ -332,18 +332,18 @@ public class Student {    private String name;    private int id;    private int
         System.out.println(c);
 ~~~~
 
-# Spring-context-注解方式
+### Spring-context-注解方式
 
-## 1.注解开发
+#### 1.注解开发
 
 	为了简化配置，Spring支持使用注解代替xml配置。
 
 
 ​	
 
-## 2.Spring常用注解
+#### 2.Spring常用注解
 
-### 2.0 注解开发准备工作
+##### 2.0 注解开发准备工作
 
 	如果要使用注解开发必须要开启组件扫描，这样加了注解的类才会被识别出来。Spring才能去解析其中的注解。
 
@@ -354,9 +354,9 @@ public class Student {    private String name;    private int id;    private int
 
 
 
-### 2.1 IOC相关注解
+##### 2.1 IOC相关注解
 
-#### 2.1.1 @Component,@Controller,@Service ,@Repository	
+###### 2.1.1 @Component,@Controller,@Service ,@Repository	
 
 	上述4个注解都是加到类上的。
 	
@@ -462,13 +462,13 @@ public class Demo {
 
 
 
-### 2.2 DI相关注解
+##### 2.2 DI相关注解
 
 	如果一个bean已经放入Spring容器中了。那么我们可以使用下列注解实现属性注入，让Spring容器帮我们完成属性的赋值。
 
 
 
-#### 2.2.1 @Value
+###### 2.2.1 @Value
 
 	主要用于String,Integer等可以直接赋值的属性注入。不依赖setter方法，支持SpEL表达式。
 
@@ -480,7 +480,7 @@ public class Demo {
 
 
 
-#### 2.2.2 @AutoWired
+###### 2.2.2 @AutoWired
 
 	Spring会给加了该注解的属性自动注入数据类型相同的对象。
 
@@ -520,7 +520,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-#### 2.2.3 @Qualifier
+###### 2.2.3 @Qualifier
 
 	如果相同类型的bean在容器中有多个时，单独使用@AutoWired就不能满足要求，这时候可以再加上@Qualifier来指定bean的名字从容器中获取bean注入。
 
@@ -539,9 +539,9 @@ public class UserServiceImpl implements UserService {
 
 
 
-### 2.3 xml配置文件相关注解
+##### 2.3 xml配置文件相关注解
 
-#### @Configuration
+###### @Configuration
 
 	标注在类上，表示当前类是一个配置类。我们可以用注解类来完全替换掉xml配置文件。
 	
@@ -559,7 +559,7 @@ public class ApplicationConfig {
 
 
 
-#### @ComponentScan
+###### @ComponentScan
 
 	可以用来代替context:component-scan标签来配置组件扫描。
 	
@@ -582,7 +582,7 @@ public class ApplicationConfig {
 
 
 
-#### @Bean
+###### @Bean
 
 	可以用来代替bean标签，主要用于第三方类的注入。
 	
@@ -648,7 +648,7 @@ public class ApplicationConfig {
 
 
 
-#### @PropertySource
+###### @PropertySource
 
 	可以用来代替context:property-placeholder，让Spring读取指定的properties文件。然后可以使用@Value来获取读取到的值。
 
@@ -707,7 +707,7 @@ public class ApplicationConfig {
 
 
 
-## 3.如何选择
+#### 3.如何选择
 
 ①SSM  
 
@@ -719,7 +719,7 @@ public class ApplicationConfig {
 
 
 
-### Spring AOP
+## Spring AOP
 
 # SpringBoot中的AOP处理
 
