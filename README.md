@@ -1501,79 +1501,31 @@ ORMSession 类主要用来从 ORMConfig 和 Mapper 中获取相关数据，然�
 
 ### Spring Security
 
-##### 本质
+##### 本质：过滤器链
 
-过滤器链
+包含的过滤器：
 
-基本位于最底层的过滤器：FilterSecurityInterceptor
-授权过程中处理抛出的异常的过滤器：ExceptionTranslationFilter
-用户名密码验证的过滤器:UsernamePasswordAuthenticationFilter
+1. WebAsyncManagerIntegrationFilter：将 Security 上下文与 Spring Web 中用于处理异步请求映射的 WebAsyncManager 进行集成。
+2. SecurityContextPersistenceFilter：在每次请求处理之前将该请求相关的安全上下文信息加载到 SecurityContextHolder 中，然后在该次请求处理完成之后，将 SecurityContextHolder 中关于这次请求的信息存储到一个“仓储”中，然后将 SecurityContextHolder 中的信息清除，例如在Session中维护一个用户的安全信息就是这个过滤器处理的。
+3. HeaderWriterFilter：用于将头信息加入响应中。
+4. CsrfFilter：用于处理跨站请求伪造。
+5. LogoutFilter：用于处理退出登录。
+6. UsernamePasswordAuthenticationFilter：用于处理基于表单的登录请求，从表单中获取用户名和密码。默认情况下处理来自 /login 的请求。从表单中获取用户名和密码时，默认使用的表单 name 值为 username 和 password，这两个值可以通过设置这个过滤器的usernameParameter 和 passwordParameter 两个参数的值进行修改。
+7. DefaultLoginPageGeneratingFilter：如果没有配置登录页面，那系统初始化时就会配置这个过滤器，并且用于在需要进行登录时生成一个登录表单页面。
+8. BasicAuthenticationFilter：检测和处理 http basic 认证。
+9. RequestCacheAwareFilter：用来处理请求的缓存。
+10. SecurityContextHolderAwareRequestFilter：主要是包装请求对象request。
+11. AnonymousAuthenticationFilter：检测 SecurityContextHolder 中是否存在 Authentication 对象，如果不存在为其提供一个匿名 Authentication。
+12. SessionManagementFilter：管理 session 的过滤器
+13. ExceptionTranslationFilter：处理 AccessDeniedException 和 AuthenticationException 异常。
+14. FilterSecurityInterceptor：可以看做过滤器链的出口。
+15. RememberMeAuthenticationFilter：当用户没有登录而直接访问资源时, 从 cookie 里找出用户的信息, 如果 Spring Security 能够识别出用户提供的remember me cookie, 用户将不必填写用户名和密码, 而是直接登录进入系统，该过滤器默认不开启。
 
+本节的demo实现的功能为：
 
-
-![image-20210513104847296](C:\Users\hu_qiang\AppData\Roaming\Typora\typora-user-images\image-20210513104847296.png)
-
-
-
-
-
-![image-20210514105521728](C:\Users\hu_qiang\AppData\Roaming\Typora\typora-user-images\image-20210514105521728.png)
-
-
-
-##### 过滤器如何加载的
-
-使用spring security配置过滤器
-
-* DelegatingFilterProxy 的init方法中获取到filterChainProxy bean对象
-* filterChainProxy 的doFilter->doFilterInternal->getfilters方法会拿到所有的过滤器链（List<SecurityFilterChain> filterChains），并Returns the first filter chain matching the supplied URL（List<filter>），doFilterInternal中的virtualFilterChain执行完所有刚刚拿到的过滤器链后，再执行底层防火墙的过滤器链.
-
-
-
-##### 在实际开发过程中从数据库获取用户名、密码时会用到的两个接口
-
-###### UserDetailService
-
-1. 继承UsernamePasswordAuthenticationFilter，重写attemptAuthentication方法
-2. 重写successfulAuthentication方法（认证成功时调用）,重写unsuccessfulAuthentication方法（认证失败时调用）
-3. 继承UserDetailService接口，实现loadUserByUsername方法，从数据库查询对应用户数据
+1. 注册了两个过滤器MyUsernamePasswordAuthenticationFilter、MyFilterSecurityInterceptor
+2. MyUsernamePasswordAuthenticationFilter：对/login请求进行拦截，并获取请求中的用户名密码，认证成功后将认证的对象放入request属性中，认证失败直接返回。
+3. MyFilterSecurityInterceptor：对白名单的路径直接进行放行，从request中获取认证对象，验证此认证对象是否能够访问当前request中的路径，如不能则重定向到登录页，反之则放行
 
 
 
-###### PasswordEncoder
-
-​		数据加密接口，用于返回user对象里面密码的加密
-
-
-
-
-
-##### web权限方案
-
-###### 认证
-
-1. 设置登录的用户名和密码
-
-   * 通过配置文件application.yml
-
-     ```
-     spring:
-       security:
-         user:
-           name: huq
-           password: 123
-     ```
-
-     注：需将之前WebSecurityConfig中注入的UserDetailsService注释掉，否则优先使用注入的UserDetailsService中的用户名密码校验方式
-
-   * 通过配置类 
-
-   * 自定义实现类
-
-###### 授权
-
-
-
-
-
-spring security 中各类关系的详细解释：https://blog.csdn.net/liuminglei1987/article/details/103963070
